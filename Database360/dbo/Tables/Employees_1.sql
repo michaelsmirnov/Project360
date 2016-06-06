@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Employees] (
-    [ID]            INT           NOT NULL,
+    [ID]            INT           NOT NULL IDENTITY,
     [Name]          VARCHAR (255) NOT NULL,
     [PrimaryRoleID] INT           NOT NULL,
     [ExternalID]    VARCHAR (255) NOT NULL,
