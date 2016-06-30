@@ -1,0 +1,896 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Database360Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EmployeeGroups">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="PrimaryRoleID" Type="int" Nullable="false" />
+          <Property Name="ExternalID" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmployeeStatuses">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmployeeToGroups">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Questions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentQuestionID" Type="int" />
+          <Property Name="MainText" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="varchar" MaxLength="4096" />
+          <Property Name="OrderNum" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QuestionToRoles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ValidationResults">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ValidationTaskID" Type="int" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="Estimation" Type="int" Nullable="false" />
+          <Property Name="EstimationDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Validations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ValidationDate" Type="datetime" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" Nullable="false" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ValidationStatuses">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ValidationTasks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ValidationID" Type="int" Nullable="false" />
+          <Property Name="ValidatingEmployeeID" Type="int" Nullable="false" />
+          <Property Name="ValidatedEmployeeID" Type="int" Nullable="false" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ValidationTaskStatuses">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Employees_EmployeeStatuses">
+          <End Role="EmployeeStatuses" Type="Self.EmployeeStatuses" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeStatuses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="PrimaryRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeToGroups_EmployeeGroups">
+          <End Role="EmployeeGroups" Type="Self.EmployeeGroups" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="EmployeeToGroups" Type="Self.EmployeeToGroups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeGroups">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmployeeToGroups">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeToGroups_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="EmployeeToGroups" Type="Self.EmployeeToGroups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmployeeToGroups">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Questions_Questions">
+          <End Role="Questions" Type="Self.Questions" Multiplicity="0..1" />
+          <End Role="Questions1" Type="Self.Questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Questions1">
+              <PropertyRef Name="ParentQuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionToRoles_Questions">
+          <End Role="Questions" Type="Self.Questions" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QuestionToRoles" Type="Self.QuestionToRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionToRoles">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionToRoles_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QuestionToRoles" Type="Self.QuestionToRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionToRoles">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationResults_Questions">
+          <End Role="Questions" Type="Self.Questions" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ValidationResults" Type="Self.ValidationResults" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationResults">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationResults_ValidationTasks">
+          <End Role="ValidationTasks" Type="Self.ValidationTasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ValidationResults" Type="Self.ValidationResults" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ValidationTasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationResults">
+              <PropertyRef Name="ValidationTaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Validations_ValidationStatuses">
+          <End Role="ValidationStatuses" Type="Self.ValidationStatuses" Multiplicity="1" />
+          <End Role="Validations" Type="Self.Validations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ValidationStatuses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Validations">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="ValidationTasks" Type="Self.ValidationTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="ValidatingEmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_Employees1">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="ValidationTasks" Type="Self.ValidationTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="ValidatedEmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_Validations">
+          <End Role="Validations" Type="Self.Validations" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ValidationTasks" Type="Self.ValidationTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Validations">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="ValidationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_ValidationTaskStatuses">
+          <End Role="ValidationTaskStatuses" Type="Self.ValidationTaskStatuses" Multiplicity="1" />
+          <End Role="ValidationTasks" Type="Self.ValidationTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ValidationTaskStatuses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database360ModelStoreContainer">
+          <EntitySet Name="EmployeeGroups" EntityType="Self.EmployeeGroups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeStatuses" EntityType="Self.EmployeeStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeToGroups" EntityType="Self.EmployeeToGroups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionToRoles" EntityType="Self.QuestionToRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ValidationResults" EntityType="Self.ValidationResults" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Validations" EntityType="Self.Validations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ValidationStatuses" EntityType="Self.ValidationStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ValidationTasks" EntityType="Self.ValidationTasks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ValidationTaskStatuses" EntityType="Self.ValidationTaskStatuses" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employees_EmployeeStatuses" Association="Self.FK_Employees_EmployeeStatuses">
+            <End Role="EmployeeStatuses" EntitySet="EmployeeStatuses" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Roles" Association="Self.FK_Employees_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeToGroups_EmployeeGroups" Association="Self.FK_EmployeeToGroups_EmployeeGroups">
+            <End Role="EmployeeGroups" EntitySet="EmployeeGroups" />
+            <End Role="EmployeeToGroups" EntitySet="EmployeeToGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeToGroups_Employees" Association="Self.FK_EmployeeToGroups_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeeToGroups" EntitySet="EmployeeToGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Questions_Questions" Association="Self.FK_Questions_Questions">
+            <End Role="Questions" EntitySet="Questions" />
+            <End Role="Questions1" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionToRoles_Questions" Association="Self.FK_QuestionToRoles_Questions">
+            <End Role="Questions" EntitySet="Questions" />
+            <End Role="QuestionToRoles" EntitySet="QuestionToRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionToRoles_Roles" Association="Self.FK_QuestionToRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="QuestionToRoles" EntitySet="QuestionToRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationResults_Questions" Association="Self.FK_ValidationResults_Questions">
+            <End Role="Questions" EntitySet="Questions" />
+            <End Role="ValidationResults" EntitySet="ValidationResults" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationResults_ValidationTasks" Association="Self.FK_ValidationResults_ValidationTasks">
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+            <End Role="ValidationResults" EntitySet="ValidationResults" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Validations_ValidationStatuses" Association="Self.FK_Validations_ValidationStatuses">
+            <End Role="ValidationStatuses" EntitySet="ValidationStatuses" />
+            <End Role="Validations" EntitySet="Validations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_Employees" Association="Self.FK_ValidationTasks_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_Employees1" Association="Self.FK_ValidationTasks_Employees1">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_Validations" Association="Self.FK_ValidationTasks_Validations">
+            <End Role="Validations" EntitySet="Validations" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_ValidationTaskStatuses" Association="Self.FK_ValidationTasks_ValidationTaskStatuses">
+            <End Role="ValidationTaskStatuses" EntitySet="ValidationTaskStatuses" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database360Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EmployeeGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="EmployeeToGroups" Relationship="Self.FK_EmployeeToGroups_EmployeeGroups" FromRole="EmployeeGroups" ToRole="EmployeeToGroups" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PrimaryRoleID" Type="Int32" Nullable="false" />
+          <Property Name="ExternalID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EmployeeStatus" Relationship="Self.FK_Employees_EmployeeStatuses" FromRole="Employees" ToRole="EmployeeStatuses" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Employees_Roles" FromRole="Employees" ToRole="Roles" />
+          <NavigationProperty Name="EmployeeToGroups" Relationship="Self.FK_EmployeeToGroups_Employees" FromRole="Employees" ToRole="EmployeeToGroups" />
+          <NavigationProperty Name="ValidationTasks" Relationship="Self.FK_ValidationTasks_Employees" FromRole="Employees" ToRole="ValidationTasks" />
+          <NavigationProperty Name="ValidationTasks1" Relationship="Self.FK_ValidationTasks_Employees1" FromRole="Employees" ToRole="ValidationTasks" />
+        </EntityType>
+        <EntityType Name="EmployeeStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_EmployeeStatuses" FromRole="EmployeeStatuses" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="EmployeeToGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EmployeeGroup" Relationship="Self.FK_EmployeeToGroups_EmployeeGroups" FromRole="EmployeeToGroups" ToRole="EmployeeGroups" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_EmployeeToGroups_Employees" FromRole="EmployeeToGroups" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentQuestionID" Type="Int32" />
+          <Property Name="MainText" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="4096" FixedLength="false" Unicode="false" />
+          <Property Name="OrderNum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Questions1" Relationship="Self.FK_Questions_Questions" FromRole="Questions" ToRole="Questions1" />
+          <NavigationProperty Name="Question1" Relationship="Self.FK_Questions_Questions" FromRole="Questions1" ToRole="Questions" />
+          <NavigationProperty Name="QuestionToRoles" Relationship="Self.FK_QuestionToRoles_Questions" FromRole="Questions" ToRole="QuestionToRoles" />
+          <NavigationProperty Name="ValidationResults" Relationship="Self.FK_ValidationResults_Questions" FromRole="Questions" ToRole="ValidationResults" />
+        </EntityType>
+        <EntityType Name="QuestionToRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Question" Relationship="Self.FK_QuestionToRoles_Questions" FromRole="QuestionToRoles" ToRole="Questions" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_QuestionToRoles_Roles" FromRole="QuestionToRoles" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Roles" FromRole="Roles" ToRole="Employees" />
+          <NavigationProperty Name="QuestionToRoles" Relationship="Self.FK_QuestionToRoles_Roles" FromRole="Roles" ToRole="QuestionToRoles" />
+        </EntityType>
+        <EntityType Name="ValidationResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ValidationTaskID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="Estimation" Type="Int32" Nullable="false" />
+          <Property Name="EstimationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Question" Relationship="Self.FK_ValidationResults_Questions" FromRole="ValidationResults" ToRole="Questions" />
+          <NavigationProperty Name="ValidationTask" Relationship="Self.FK_ValidationResults_ValidationTasks" FromRole="ValidationResults" ToRole="ValidationTasks" />
+        </EntityType>
+        <EntityType Name="Validation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ValidationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ValidationStatus" Relationship="Self.FK_Validations_ValidationStatuses" FromRole="Validations" ToRole="ValidationStatuses" />
+          <NavigationProperty Name="ValidationTasks" Relationship="Self.FK_ValidationTasks_Validations" FromRole="Validations" ToRole="ValidationTasks" />
+        </EntityType>
+        <EntityType Name="ValidationStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Validations" Relationship="Self.FK_Validations_ValidationStatuses" FromRole="ValidationStatuses" ToRole="Validations" />
+        </EntityType>
+        <EntityType Name="ValidationTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ValidationID" Type="Int32" Nullable="false" />
+          <Property Name="ValidatingEmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="ValidatedEmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_ValidationTasks_Employees" FromRole="ValidationTasks" ToRole="Employees" />
+          <NavigationProperty Name="Employee1" Relationship="Self.FK_ValidationTasks_Employees1" FromRole="ValidationTasks" ToRole="Employees" />
+          <NavigationProperty Name="ValidationResults" Relationship="Self.FK_ValidationResults_ValidationTasks" FromRole="ValidationTasks" ToRole="ValidationResults" />
+          <NavigationProperty Name="Validation" Relationship="Self.FK_ValidationTasks_Validations" FromRole="ValidationTasks" ToRole="Validations" />
+          <NavigationProperty Name="ValidationTaskStatus" Relationship="Self.FK_ValidationTasks_ValidationTaskStatuses" FromRole="ValidationTasks" ToRole="ValidationTaskStatuses" />
+        </EntityType>
+        <EntityType Name="ValidationTaskStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ValidationTasks" Relationship="Self.FK_ValidationTasks_ValidationTaskStatuses" FromRole="ValidationTaskStatuses" ToRole="ValidationTasks" />
+        </EntityType>
+        <Association Name="FK_EmployeeToGroups_EmployeeGroups">
+          <End Role="EmployeeGroups" Type="Self.EmployeeGroup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="EmployeeToGroups" Type="Self.EmployeeToGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeGroups">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmployeeToGroups">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_EmployeeStatuses">
+          <End Role="EmployeeStatuses" Type="Self.EmployeeStatus" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeStatuses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Roles">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="PrimaryRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeToGroups_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmployeeToGroups" Type="Self.EmployeeToGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmployeeToGroups">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="ValidationTasks" Type="Self.ValidationTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="ValidatingEmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_Employees1">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="ValidationTasks" Type="Self.ValidationTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="ValidatedEmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Questions_Questions">
+          <End Role="Questions" Type="Self.Question" Multiplicity="0..1" />
+          <End Role="Questions1" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Questions1">
+              <PropertyRef Name="ParentQuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionToRoles_Questions">
+          <End Role="Questions" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QuestionToRoles" Type="Self.QuestionToRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionToRoles">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationResults_Questions">
+          <End Role="Questions" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ValidationResults" Type="Self.ValidationResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationResults">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionToRoles_Roles">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QuestionToRoles" Type="Self.QuestionToRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QuestionToRoles">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationResults_ValidationTasks">
+          <End Role="ValidationTasks" Type="Self.ValidationTask" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ValidationResults" Type="Self.ValidationResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ValidationTasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationResults">
+              <PropertyRef Name="ValidationTaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Validations_ValidationStatuses">
+          <End Role="ValidationStatuses" Type="Self.ValidationStatus" Multiplicity="1" />
+          <End Role="Validations" Type="Self.Validation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ValidationStatuses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Validations">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_Validations">
+          <End Role="Validations" Type="Self.Validation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ValidationTasks" Type="Self.ValidationTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Validations">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="ValidationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationTasks_ValidationTaskStatuses">
+          <End Role="ValidationTaskStatuses" Type="Self.ValidationTaskStatus" Multiplicity="1" />
+          <End Role="ValidationTasks" Type="Self.ValidationTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ValidationTaskStatuses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ValidationTasks">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database360Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EmployeeGroups" EntityType="Self.EmployeeGroup" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="EmployeeStatuses" EntityType="Self.EmployeeStatus" />
+          <EntitySet Name="EmployeeToGroups" EntityType="Self.EmployeeToGroup" />
+          <EntitySet Name="Questions" EntityType="Self.Question" />
+          <EntitySet Name="QuestionToRoles" EntityType="Self.QuestionToRole" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="ValidationResults" EntityType="Self.ValidationResult" />
+          <EntitySet Name="Validations" EntityType="Self.Validation" />
+          <EntitySet Name="ValidationStatuses" EntityType="Self.ValidationStatus" />
+          <EntitySet Name="ValidationTasks" EntityType="Self.ValidationTask" />
+          <EntitySet Name="ValidationTaskStatuses" EntityType="Self.ValidationTaskStatus" />
+          <AssociationSet Name="FK_EmployeeToGroups_EmployeeGroups" Association="Self.FK_EmployeeToGroups_EmployeeGroups">
+            <End Role="EmployeeGroups" EntitySet="EmployeeGroups" />
+            <End Role="EmployeeToGroups" EntitySet="EmployeeToGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_EmployeeStatuses" Association="Self.FK_Employees_EmployeeStatuses">
+            <End Role="EmployeeStatuses" EntitySet="EmployeeStatuses" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Roles" Association="Self.FK_Employees_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeToGroups_Employees" Association="Self.FK_EmployeeToGroups_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeeToGroups" EntitySet="EmployeeToGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_Employees" Association="Self.FK_ValidationTasks_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_Employees1" Association="Self.FK_ValidationTasks_Employees1">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Questions_Questions" Association="Self.FK_Questions_Questions">
+            <End Role="Questions" EntitySet="Questions" />
+            <End Role="Questions1" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionToRoles_Questions" Association="Self.FK_QuestionToRoles_Questions">
+            <End Role="Questions" EntitySet="Questions" />
+            <End Role="QuestionToRoles" EntitySet="QuestionToRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationResults_Questions" Association="Self.FK_ValidationResults_Questions">
+            <End Role="Questions" EntitySet="Questions" />
+            <End Role="ValidationResults" EntitySet="ValidationResults" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionToRoles_Roles" Association="Self.FK_QuestionToRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="QuestionToRoles" EntitySet="QuestionToRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationResults_ValidationTasks" Association="Self.FK_ValidationResults_ValidationTasks">
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+            <End Role="ValidationResults" EntitySet="ValidationResults" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Validations_ValidationStatuses" Association="Self.FK_Validations_ValidationStatuses">
+            <End Role="ValidationStatuses" EntitySet="ValidationStatuses" />
+            <End Role="Validations" EntitySet="Validations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_Validations" Association="Self.FK_ValidationTasks_Validations">
+            <End Role="Validations" EntitySet="Validations" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationTasks_ValidationTaskStatuses" Association="Self.FK_ValidationTasks_ValidationTaskStatuses">
+            <End Role="ValidationTaskStatuses" EntitySet="ValidationTaskStatuses" />
+            <End Role="ValidationTasks" EntitySet="ValidationTasks" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Database360ModelStoreContainer" CdmEntityContainer="Database360Entities">
+          <EntitySetMapping Name="EmployeeGroups">
+            <EntityTypeMapping TypeName="Database360Model.EmployeeGroup">
+              <MappingFragment StoreEntitySet="EmployeeGroups">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="Database360Model.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PrimaryRoleID" ColumnName="PrimaryRoleID" />
+                <ScalarProperty Name="ExternalID" ColumnName="ExternalID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeStatuses">
+            <EntityTypeMapping TypeName="Database360Model.EmployeeStatus">
+              <MappingFragment StoreEntitySet="EmployeeStatuses">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeToGroups">
+            <EntityTypeMapping TypeName="Database360Model.EmployeeToGroup">
+              <MappingFragment StoreEntitySet="EmployeeToGroups">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questions">
+            <EntityTypeMapping TypeName="Database360Model.Question">
+              <MappingFragment StoreEntitySet="Questions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ParentQuestionID" ColumnName="ParentQuestionID" />
+                <ScalarProperty Name="MainText" ColumnName="MainText" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OrderNum" ColumnName="OrderNum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionToRoles">
+            <EntityTypeMapping TypeName="Database360Model.QuestionToRole">
+              <MappingFragment StoreEntitySet="QuestionToRoles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Database360Model.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ValidationResults">
+            <EntityTypeMapping TypeName="Database360Model.ValidationResult">
+              <MappingFragment StoreEntitySet="ValidationResults">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ValidationTaskID" ColumnName="ValidationTaskID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="Estimation" ColumnName="Estimation" />
+                <ScalarProperty Name="EstimationDate" ColumnName="EstimationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Validations">
+            <EntityTypeMapping TypeName="Database360Model.Validation">
+              <MappingFragment StoreEntitySet="Validations">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ValidationDate" ColumnName="ValidationDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ValidationStatuses">
+            <EntityTypeMapping TypeName="Database360Model.ValidationStatus">
+              <MappingFragment StoreEntitySet="ValidationStatuses">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ValidationTasks">
+            <EntityTypeMapping TypeName="Database360Model.ValidationTask">
+              <MappingFragment StoreEntitySet="ValidationTasks">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ValidationID" ColumnName="ValidationID" />
+                <ScalarProperty Name="ValidatingEmployeeID" ColumnName="ValidatingEmployeeID" />
+                <ScalarProperty Name="ValidatedEmployeeID" ColumnName="ValidatedEmployeeID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ValidationTaskStatuses">
+            <EntityTypeMapping TypeName="Database360Model.ValidationTaskStatus">
+              <MappingFragment StoreEntitySet="ValidationTaskStatuses">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
