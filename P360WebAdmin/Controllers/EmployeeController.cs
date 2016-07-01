@@ -39,18 +39,18 @@ namespace P360WebAdmin.Controllers
         // POST: /Employee/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Employee emp)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                de.Employees.Add(emp);
 
-                return RedirectToAction("Index");
+                de.SaveChanges();
+
+                return RedirectToAction("index");
             }
-            catch
-            {
+            else
                 return View();
-            }
         }
 
         //
@@ -58,51 +58,36 @@ namespace P360WebAdmin.Controllers
 
         public ActionResult Edit(int id)
         {
-            return View();
+            return View(de.Employees.Find (id));
         }
 
         //
         // POST: /Employee/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Employee emp)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                de.Entry<Employee>(emp).State = System.Data.Entity.EntityState.Modified;
+                de.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("index");
             }
-            catch
-            {
+            else
                 return View();
-            }
         }
 
         //
         // GET: /Employee/Delete/5
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Employee emp)
         {
-            return View();
-        }
+            de.Entry<Employee>(emp).State = System.Data.Entity.EntityState.Deleted;
 
-        //
-        // POST: /Employee/Delete/5
+            de.SaveChanges();
 
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("index");
         }
     }
 }
